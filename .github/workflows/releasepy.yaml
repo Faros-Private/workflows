@@ -1,0 +1,26 @@
+name: "Release"
+
+on:
+  workflow_call:
+    secrets:
+      token:
+        required: true
+jobs:
+  Release:
+      # considera que todos os outros testes ja foram rodados antes do release
+      if: ${{!contains(github.event.head_commit.message, 'chore(release):')}}
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/setup-python@v2
+          with:
+            python-version: 3.10.4
+          env:  
+            ADMIN_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Semantic Release
+          run: |
+            pip install python-semantic-release
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            GITHUB_ACTOR=admin GH_TOKEN="$ADMIN_TOKEN" semantic-release publish --verbosity=DEBUG
