@@ -35,12 +35,13 @@ jobs:
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
         - name: Install project
-          run: poetry install --no-interaction
+          run: |
+            poetry lock --no-update
+            poetry install --no-interaction
         - name: Add py semantic to env
           run: poetry add python-semantic-release
         - name: Semantic Release
           run: |
-            poetry add python-semantic-release
             source .venv/bin/activate
             git config user.name github-actions
             git config user.email github-actions@github.com
