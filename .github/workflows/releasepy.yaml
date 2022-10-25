@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       token:
-        required: true
+        required: false
 jobs:
   Release:
       # considera que todos os outros testes ja foram rodados antes do release
