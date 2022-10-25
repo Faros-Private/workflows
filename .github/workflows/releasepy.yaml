@@ -1,4 +1,4 @@
-name: "Release Python"
+name: "Release"
 
 on:
   workflow_call:
@@ -10,13 +10,15 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout code
-          uses: actions/checkout@v2
+          uses: actions/checkout@v3
           with:
             fetch-depth: 0
             token: ${{ secrets.ADMIN_GITHUB_PAT}}
-        - uses: actions/setup-python@v2
+        - uses: actions/setup-python@v4
           with:
             python-version: 3.10.4
+          env:  
+            ADMIN_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
         - name: Install Poetry
           uses: snok/install-poetry@v1
           with:
@@ -34,7 +36,12 @@ jobs:
           run: poetry install --no-interaction --no-root
         - name: Install project
           run: poetry install --no-interaction
+        - name: Add py semantic to env
+          run: poetry add python-semantic-release
         - name: Semantic Release
-          uses: relekang/python-semantic-release@master
-          with:
-            github_token: ${{ secrets.ADMIN_GITHUB_PAT }}
+          run: |
+            poetry add python-semantic-release
+            source .venv/bin/activate
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            GITHUB_ACTOR=admin GH_TOKEN="$ADMIN_TOKEN" semantic-release publish --verbosity=DEBUG
