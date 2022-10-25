@@ -16,6 +16,8 @@ jobs:
             ADMIN_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
         - name: Checkout code
           uses: actions/checkout@v2
+          with:
+            token: ${{ secrets.ADMIN_GITHUB_PAT}}
         - name: Semantic Release
           run: |
             pip install python-semantic-release
