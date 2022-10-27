@@ -14,7 +14,10 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: .*venv/.
-          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_PYTHON_ISORT: true
           GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
       - name: Set up python
         id: setup-python
