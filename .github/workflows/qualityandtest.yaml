@@ -8,17 +8,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: Lint Code Base
-        uses: github/super-linter/slim@v4
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          DEFAULT_BRANCH: main
-          FILTER_REGEX_EXCLUDE: .*venv/.
-          VALIDATE_PYTHON_PYLINT: true
-          VALIDATE_PYTHON_BLACK: true
-          VALIDATE_PYTHON_FLAKE8: true
-          VALIDATE_PYTHON_ISORT: true
-          GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v4
@@ -41,6 +30,17 @@ jobs:
         run: poetry install --no-interaction --no-root
       - name: Install project
         run: poetry install --no-interaction
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
+          FILTER_REGEX_EXCLUDE: .*venv/.
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_BLACK: true
+          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_PYTHON_ISORT: true
+          GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
       - name: Add pytest to env
         run: poetry add pytest
       - name: Run tests
