@@ -38,8 +38,6 @@ jobs:
           run: |
             poetry lock --no-update
             poetry install --no-interaction
-        - name: Add py semantic to env
-          run: poetry add python-semantic-release
         - name: Semantic Release
           run: |
             source .venv/bin/activate
