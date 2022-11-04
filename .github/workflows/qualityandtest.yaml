@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v4
@@ -36,14 +38,17 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: .*venv/.
-          VALIDATE_PYTHON_PYLINT: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_PYTHON_ISORT: true
           GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_PAT }}
+      - name: Pylint
+        run: |
+          poetry add pylint
+          source .venv/bin/activate
+          pylint --rcfile=.github/linters/.python-lint ignore-patterns=.*venv/.
       - name: Add pytest to env
         run: poetry add pytest
       - name: Run tests
         run: |
-          source .venv/bin/activate
           pytest test/
