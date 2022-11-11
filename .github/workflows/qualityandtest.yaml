@@ -46,7 +46,7 @@ jobs:
         run: |
           source .venv/bin/activate
           pylint $(git ls-files '*.py') --rcfile=.github/linters/.python-lint --ignore-patterns=.*venv/. 
-          if [ mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs == 1 ]; then
+          if [[ mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs == 1 ]]; then
               mypy --install-types
               mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs
           fi
