@@ -46,8 +46,10 @@ jobs:
         run: |
           source .venv/bin/activate
           pylint $(git ls-files '*.py') --rcfile=.github/linters/.python-lint --ignore-patterns=.*venv/. 
-          mypy --install-types
-          mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs
+          if [ mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs == 1 ]; then
+              mypy --install-types
+              mypy $(git ls-files '*.py') --ignore-missing-imports --disallow-untyped-defs
+          fi
       - name: Add pytest to env
         run: poetry add pytest
       - name: Run tests
